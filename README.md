@@ -1,109 +1,72 @@
-Windows Folder Size Batch Script
+# Windows Folder Size Batch Script
 
 This repository contains a single Windows batch file that calculates the size of the current directory and automatically renames itself to include the used storage capacity in gigabytes (GB).
 
-The script is designed to be double-clicked and relies only on standard Windows components that are available by default.
+The script is intended to be double-clicked and uses only standard Windows components.
 
-Purpose
+## Purpose
 
-The goal of this script is to provide a quick and visual way to see how much disk space a folder occupies — simply by looking at the batch file’s name after execution.
+The purpose of this script is to provide a quick and visual way to determine how much disk space a folder occupies. After execution, the folder size is visible directly in the batch file name.
 
-This is especially useful for:
+Typical use cases include manual disk cleanup, folder comparison, archive preparation, and storage analysis on local drives, external drives, or NAS systems.
 
-Manual disk cleanup
+## What the script does
 
-Comparing folder sizes
+- Calculates the total size of the current folder
+- Converts the result to gigabytes (GB)
+- Applies a small correction factor for unit conversion
+- Cleans up formatting artifacts from numeric output
+- Renames the batch file itself to include the calculated size
 
-Archiving or backup preparation
-
-NAS or external drive organization
-
-What the script does
-
-Determines the total size of the current folder
-
-Calculates the size in gigabytes (GB)
-
-Applies a small correction factor for unit conversion
-
-Removes formatting artifacts (spaces, locale issues)
-
-Renames the batch file itself to include the calculated size
-
-Example result
+Example resulting filename:
 12.347GB_of_storage_capacity_used.bat
 
+## How it works
 
-After execution, the filename itself reflects the folder’s size.
+- Uses VBScript (cscript.exe) and Scripting.FileSystemObject to read the folder size
+- Performs calculations and number formatting using temporary VBS files
+- Automatically deletes all temporary files after execution
+- Uses only built-in Windows tools, no external dependencies
 
-How it works (technical overview)
+Temporary files are created in the system %TEMP% directory.
 
-Uses VBScript (cscript.exe) and Scripting.FileSystemObject to read folder size
+## Usage
 
-Performs numeric calculations and formatting using temporary .vbs files
+1. Place the batch file inside the folder you want to analyze
+2. Double-click the batch file
+3. Wait until execution finishes
+4. The batch file renames itself to show the folder size in GB
 
-Cleans up all temporary files automatically
+No command-line arguments are required.
 
-Uses standard Windows batch features only (no external dependencies)
-
-Temporary files are created in %TEMP% and deleted once execution is complete.
-
-Usage
-
-Copy the .bat file into the folder you want to analyze
-
-Double-click the batch file
-
-Wait a few seconds
-
-The batch file renames itself to show the folder size in GB
-
-No parameters or command-line usage are required.
-
-Network drives and NAS (UNC paths)
+## Network drives and NAS (UNC paths)
 
 When running batch files from network drives or NAS locations, Windows may display security warnings or block execution.
 
-Recommended (safe) solution
-
-Mark the network location as Local Intranet:
-
+Recommended solution:
+Add the network location to the Local Intranet zone using:
 Internet Options → Security → Local Intranet → Sites → Advanced
 
+Add the network share manually. This allows execution without disabling Windows security features.
 
-Add your network share manually.
-This enables execution without disabling Windows security features.
-
-Alternative workaround (registry)
-
+Registry workaround:
 If you encounter errors such as:
-
 UNC paths are not supported
 
-
 You can add the following registry value:
+HKEY_CURRENT_USER\Software\Microsoft\Command Processor
+DisableUNCCheck (REG_DWORD) = 1
 
-HKEY_CURRENT_USER
-  \Software
-    \Microsoft
-      \Command Processor
-        DisableUNCCheck (REG_DWORD) = 1
+Use registry changes with care.
 
+## Limitations
 
-⚠️ Use registry changes with care.
+- Execution time depends on folder size and disk performance
+- Very large directories may take noticeable time to process
+- Size calculation is approximate and intended for human-readable output
 
-Limitations
+## Requirements
 
-Execution time depends on folder size and disk speed
-
-Very large directories may take noticeable time to process
-
-Precision is approximate (suitable for human-readable display, not accounting)
-
-Requirements
-
-Windows operating system
-
-cscript.exe (included with Windows)
-
-NTFS or FAT-compatible file system
+- Windows operating system
+- cscript.exe (included with Windows)
+- NTFS or FAT-compatible file system
